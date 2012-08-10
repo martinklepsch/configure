@@ -60,7 +60,7 @@ getConfiguration() {
 }
 
 checkForVundle() {
-  printf "[3/$STEPS] Looking for additional dependency management tools...\n"
+  printf "[4/$STEPS] Looking for additional dependency management tools...\n"
   # change into $CONFIGDIR
   if grep -rq "vundle" $HOME/$CONFIGDIR
   then
@@ -112,6 +112,7 @@ getStatusOfFile() {
 # }
 
 dotfilesInstall() {
+  printf "[3/$STEPS] Installing symlinks into your home directory...\n"
   local name
   local force
   local verbose
@@ -136,6 +137,6 @@ dotfilesInstall() {
 
 preflight
 getConfiguration
-checkForVundle
 # dotfilesStatus
 dotfilesInstall
+checkForVundle

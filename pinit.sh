@@ -4,8 +4,8 @@ NAME=ZING
 
 # CONFIGDIR=~/Projects/configuration-management/etc
 CONFIGDIR=etc
-GITREPO=git://github.com/mklappstuhl/dotfiles.git
-IDENTITY_FILE="$CONFIGDIR"/INSTALLED_BY_"$NAME"
+GITREPO=git@github.com:mklappstuhl/dotfiles.git
+IDENTITY_FILE="$HOME"/"$CONFIGDIR"/.INSTALLED_BY_"$NAME"
 STEPS=4
 
 #
@@ -27,57 +27,47 @@ STEPS=4
 # Checks if there are existing files and asks
 # user if those can be deleted
 preflight () {
-printf "[1/$STEPS] Checking for existing Files..." #DEBUG
+printf "\e[32m[1/$STEPS] Checking for existing Files...\e[0m" #DEBUG
 if [ ! -d "$HOME/$CONFIGDIR" ]; then
-  printf " none\n"
+  printf " none\e[0m\n"
 else
-  printf " found\n"
+  printf "\e[33m found\n"
   if [ ! -e "$IDENTITY_FILE" ]; then
-    read -p "Do you wish to delete the existing files in $HOME/$CONFIGDIR? [Y/n] " yn
-    case $yn in
-         [Yy]* )
-           rm -rf "$HOME/$CONFIGDIR"
-           ;;
-         [Nn]* )
-           exit
-           ;;
-         * )
-           printf "Please answer yes or no.\n"
-           ;;
-    esac
+    printf "> Please remove $HOME/$CONFIGDIR manually before rerunning the script\e[0m\n"
+    exit
+#    read -p "Do you wish to delete the existing files in $HOME/$CONFIGDIR? [Y/n] " yn
+#    case $yn in
+#         [Yy]* )
+#           rm -rf "$HOME/$CONFIGDIR"
+#           ;;
+#         [Nn]* )
+#           exit
+#           ;;
+#         * )
+#           printf "Please answer yes or no.\n"
+#           ;;
+#    esac
+  else
+    printf "\e[0m> You already have all files in place!\n"
+    printf "> Update by \"cd $HOME/$CONFIGDIR && git pull\"\n"
+    exit
   fi
 fi
 }
 
 getConfiguration() {
-  printf "[2/$STEPS] Getting your configuration..."
-  if git clone --recursive $GITREPO $HOME/$CONFIGDIR 2> /dev/null
-  then : touch "$IDENTITY_FILE"
-  else : printf "Something went wrong when cloning your configuration!\n"
-  fi
-
-  printf " done\n"
-}
-
-checkForVundle() {
-  printf "[4/$STEPS] Looking for additional dependency management tools...\n"
-  # change into $CONFIGDIR
-  if grep -rq "vundle" $HOME/$CONFIGDIR
+  printf "\e[32m[2/$STEPS] Getting your configuration...\e[0m"
+  if git clone --quiet --recursive $GITREPO $HOME/$CONFIGDIR > /dev/null 2>&1
   then
-    printf "> Looks like you are using Vundle...\n"
-    read -p "> Do you want me to execute :BundleInstall! for you now? [Y/n] " yn
-    case $yn in
-         [Yy]* )
-           vim -s-ex -c 'BundleInstall!' -c 'qa'
-           ;;
-         [Nn]* )
-           exit
-           ;;
-         * )
-           printf "Please answer yes or no.\n"
-           ;;
-    esac
+    touch "$IDENTITY_FILE"
+    printf " done\n"
+  else
+    printf "\n\e[31m> Cloning $GITREPO failed!\n"
+    printf "> Please make sure you can access the repository before rerunning the script\n"
+    printf "> ( git clone --recursive $GITREPO $HOME/$CONFIGDIR )\e[0m\n"
+    exit
   fi
+
 }
 
 getFileList() {
@@ -103,16 +93,16 @@ getStatusOfFile() {
 }
 
 # DEBUGGING CODE
-# dotfilesStatus() {
-#   local name
-#   getFileList | while read name ; do
-#     local status=$(getStatusOfFile "$name")
-#     printf "%-30s   %s\n" "$name" "$status"
-#   done
-# }
+dotfilesStatus() {
+  local name
+  getFileList | while read name ; do
+    local status=$(getStatusOfFile "$name")
+    printf "%-30s   %s\n" "$name" "$status"
+  done
+}
 
 dotfilesInstall() {
-  printf "[3/$STEPS] Installing symlinks into your home directory...\n"
+  printf "\e[32m[3/$STEPS] Installing symlinks into your home directory...\e[0m\n"
   local name
   local force
   local verbose
@@ -135,8 +125,18 @@ dotfilesInstall() {
   done
 }
 
+checkForVundle() {
+  printf "\e[32m[4/$STEPS] Looking for additional dependency management tools...\e[0m\n"
+  # change into $CONFIGDIR
+  if grep -rq "vundle" $HOME/$CONFIGDIR
+  then
+    printf "> Looks like you are using Vundle...\n"
+    printf "> execute \"vim -c 'BundleInstall!' -c 'qa'\" to install your bundles\n"
+  fi
+}
+
 preflight
 getConfiguration
-# dotfilesStatus
+dotfilesStatus
 dotfilesInstall
 checkForVundle

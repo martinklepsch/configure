@@ -1,12 +1,12 @@
 #!/bin/sh
 
-NAME=ZING
+name=ZING
 
-# CONFIGDIR=~/Projects/configuration-management/etc
-CONFIGDIR=etc
-GITREPO=git@github.com:mklappstuhl/dotfiles.git
-IDENTITY_FILE="$HOME"/"$CONFIGDIR"/.INSTALLED_BY_"$NAME"
-STEPS=4
+# configdir=~/Projects/configuration-management/etc
+configdir=etc
+gitrepo=git@github.com:mklappstuhl/dotfiles.git
+identity_file="$HOME"/"$configdir"/.INSTALLED_BY_"$NAME"
+steps=5
 
 #
 # This script is used to install configs on unix systems
@@ -27,18 +27,18 @@ STEPS=4
 # Checks if there are existing files and asks
 # user if those can be deleted
 preflight () {
-printf "\e[32m[1/$STEPS] Checking for existing Files...\e[0m" #DEBUG
-if [ ! -d "$HOME/$CONFIGDIR" ]; then
-  printf " none\e[0m\n"
+printf "\e[32m[1/$steps] Checking for existing $HOME/$configdir directory...\e[0m" #DEBUG
+if [ ! -d "$HOME/$configdir" ]; then
+    printf " not found\e[0m\n"
 else
   printf "\e[33m found\n"
-  if [ ! -e "$IDENTITY_FILE" ]; then
-    printf "> Please remove $HOME/$CONFIGDIR manually before rerunning the script\e[0m\n"
+  if [ ! -e "$identity_file" ]; then
+    printf "> Please remove $HOME/$configdir manually before rerunning the script\e[0m\n"
     exit
-#    read -p "Do you wish to delete the existing files in $HOME/$CONFIGDIR? [Y/n] " yn
+#    read -p "Do you wish to delete the existing files in $HOME/$configdir? [Y/n] " yn
 #    case $yn in
 #         [Yy]* )
-#           rm -rf "$HOME/$CONFIGDIR"
+#           rm -rf "$HOME/$configdir"
 #           ;;
 #         [Nn]* )
 #           exit
@@ -49,60 +49,85 @@ else
 #    esac
   else
     printf "\e[0m> You already have all files in place!\n"
-    printf "> Update by \"cd $HOME/$CONFIGDIR && git pull\"\n"
-    exit
+    printf "> Update by \"cd $HOME/$configdir && git pull\"\n"
   fi
 fi
 }
 
 getConfiguration() {
-  printf "\e[32m[2/$STEPS] Getting your configuration...\e[0m"
-  if git clone --quiet --recursive $GITREPO $HOME/$CONFIGDIR > /dev/null 2>&1
+  printf "\e[32m[2/$steps] Getting your configuration...\e[0m"
+  if git clone --quiet --recursive $gitrepo $HOME/$configdir > /dev/null 2>&1
   then
-    touch "$IDENTITY_FILE"
+    touch "$identity_file"
     printf " done\n"
   else
-    printf "\n\e[31m> Cloning $GITREPO failed!\n"
+    printf "\n\e[31m> Cloning $gitrepo failed!\n"
     printf "> Please make sure you can access the repository before rerunning the script\n"
-    printf "> ( git clone --recursive $GITREPO $HOME/$CONFIGDIR )\e[0m\n"
+    printf "> ( git clone --recursive $gitrepo $HOME/$configdir )\e[0m\n"
     exit
   fi
 
 }
 
 getFileList() {
-  find $HOME/$CONFIGDIR -maxdepth 1 | cut -d / -f 5 | grep -vE ".git"
+  find $HOME/$configdir/* -maxdepth 0 -printf "%f\n"
 }
 
 getStatusOfFile() {
   local name="$1"
-  local src="$CONFIGDIR/$name"
+  local src="$configdir/$name"
   local dst="$HOME/.$name"
   if ! test -e "$dst" ; then
-    echo "."
+    echo "OK (no link or file)"
   elif ! test -L "$dst" ; then
-    echo "file"
+    echo "existing file"
   else
     local cur="$(readlink $dst)"
     if test "$cur" = "$src" ; then
-      echo "OK"
+      echo "OK (correct link exists)"
     else
       echo "link $cur"
     fi
   fi
 }
 
-# DEBUGGING CODE
 dotfilesStatus() {
   local name
-  getFileList | while read name ; do
+  local existing_files
+  # Process Substitution is used here, so that $existing_files
+  # is available after the while loop
+  # http://mywiki.wooledge.org/BashFAQ/024
+  while read -r name ; do
     local status=$(getStatusOfFile "$name")
-    printf "%-30s   %s\n" "$name" "$status"
-  done
+    if [ "$status" = "existing file" ]
+    then
+      printf "\e[31m%-30s   %s\e[0m\n" "$name" "$status"
+      ((existing_files=testtesttest))
+    fi
+  done < <(getFileList)
+  if [[ $existing_files ]]
+  then
+    return 1
+  else
+    return 0
+  fi
+}
+
+checkForExistingFiles() {
+
+  printf "\e[32m[3/$steps] Checking for existing files in $HOME/$configdir...\e[0m"
+  if ! dotfilesStatus
+  then
+    printf "\n\e[33m> Please (re)move the files above before rerunning the script\n"
+    printf "> to allow the creation of symlinks instead\e[0m\n"
+    exit 1
+  else
+    printf " none found\n"
+  fi
 }
 
 dotfilesInstall() {
-  printf "\e[32m[3/$STEPS] Installing symlinks into your home directory...\e[0m\n"
+  printf "\e[32m[4/$steps] Installing symlinks into your home directory...\e[0m\n"
   local name
   local force
   local verbose
@@ -111,13 +136,13 @@ dotfilesInstall() {
   local -a files
   [ "${#files[@]}" -gt 0 ] || files=( $( getFileList ) )
   for name in ${files[@]} ; do
-    printf "installing %-30s " "/$name"
+    printf "installing %-21s " "/$name"
     local status=$(getStatusOfFile "$name")
-    if [ -z "$force" -a "$status" == "OK" ] ; then
-      echo "correct link exists, $status"
+    if [ -z "$force" -a "$status" == "OK (correct link exists)" ] ; then
+      echo "$status"
     else
       echo
-      if ! ( ln $force $verbose -s $HOME/$CONFIGDIR/$name .$name ) ; then
+      if ! ( ln $force $verbose -s $configdir/$name .$name ) ; then
         local rc=$?
         $skip || return $rc
       fi
@@ -126,9 +151,9 @@ dotfilesInstall() {
 }
 
 checkForVundle() {
-  printf "\e[32m[4/$STEPS] Looking for additional dependency management tools...\e[0m\n"
-  # change into $CONFIGDIR
-  if grep -rq "vundle" $HOME/$CONFIGDIR
+  printf "\e[32m[5/$steps] Looking for additional dependency management tools...\e[0m\n"
+  # change into $configdir
+  if grep -rq "vundle" $HOME/$configdir
   then
     printf "> Looks like you are using Vundle...\n"
     printf "> execute \"vim -c 'BundleInstall!' -c 'qa'\" to install your bundles\n"
@@ -136,7 +161,8 @@ checkForVundle() {
 }
 
 preflight
+#dotfilesStatus
 getConfiguration
-dotfilesStatus
+checkForExistingFiles
 dotfilesInstall
 checkForVundle

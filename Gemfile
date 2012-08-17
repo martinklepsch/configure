@@ -10,5 +10,6 @@ gem 'thin'
 gem 'sprockets'
 gem 'bourbon'
 gem 'datamapper'
-gem 'dm-sqlite-adapter'
-gem 'pry'
+
+gem 'dm-sqlite-adapter', :group => :development
+gem 'pry', :group => :development

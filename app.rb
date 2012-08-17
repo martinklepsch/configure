@@ -2,10 +2,16 @@ require 'rubygems'
 require 'sinatra'
 require 'haml'
 require 'uri'
-# require 'mongo'
-
+require 'datamapper'
+require 'pry'
 
 class Configure < Sinatra::Base
+
+  configure :development do
+    DataMapper.setup( :default, "sqlite3://#{Dir.pwd}/configure-app.db" )
+  end
+  require_relative 'models/user'
+
   get '/' do
     haml :index
   end
@@ -16,13 +22,22 @@ class Configure < Sinatra::Base
       github_uri = clone_url.split(":").last
       username = github_uri.split("/").first
       repo = github_uri.split("/").last
-      haml :copy_field, :locals => {:username => username}, :layout => (request.xhr? ? false : :layout)
+      u = User.new(:name => username, :clone_url => repo)
+      u.save
+      haml :copy_field, :locals => {:user => u}, :layout => (request.xhr? ? false : :layout)
     else
       haml :invalid_url, :layout => (request.xhr? ? false : :layout)
     end
   end
 
+  get '/users' do
+    haml :users, :locals => {:users => User.all}
+  end
+
   get '/:id' do
-    send_file 'pinit.sh'
+    user = User.first(:name => params[:id])
+    binding.pry
+    clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
+    liquid :pinit, :locals => {:repo => clone_url}
   end
 end

@@ -1,3 +1,9 @@
+%p
+  %strong The command below will do the following:
+%ol
+  %li Download your dotfiles repository into ~/etc
+  %li Check for conflicting files or symlinks
+  %li Symlink all your dotfiles into your home
 %input{:name => "setup_command", :type => "text",
-  :value => "curl http://conigure.martinklepsch.org/#{username} | bash",
+  :value => "curl http://configure.martinklepsch.org/#{username} | bash",
   :size => "50", :disabled => "true"}

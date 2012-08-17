@@ -18,7 +18,7 @@ class Configure < Sinatra::Base
       repo = github_uri.split("/").last
       haml :copy_field, :locals => {:username => username}, :layout => (request.xhr? ? false : :layout)
     else
-      haml :not_private_clone_url, :layout => (request.xhr? ? false : :layout)
+      haml :invalid_url, :layout => (request.xhr? ? false : :layout)
     end
   end
 

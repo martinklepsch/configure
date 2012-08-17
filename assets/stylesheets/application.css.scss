@@ -36,5 +36,14 @@ button {
 
 input[type="text"] {
   padding: 5px;
-  border: 1px solid gray;
+  border: 1px solid #ccc;
+}
+
+table {
+  border: 1px solid #ccc;
+  padding: 5px;
+  width: 100%;
+  th {
+    text-align:left;
+  }
 }

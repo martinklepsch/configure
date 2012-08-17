@@ -3,7 +3,6 @@ require 'sinatra'
 require 'haml'
 require 'uri'
 require 'datamapper'
-require 'pry'
 
 class Configure < Sinatra::Base
 
@@ -36,7 +35,6 @@ class Configure < Sinatra::Base
 
   get '/:id' do
     user = User.first(:name => params[:id])
-    binding.pry
     clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
     erb :pinit, :locals => { :repo => clone_url }
   end

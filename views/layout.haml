@@ -1,0 +1,40 @@
+!!!
+/[if lt IE 7 ] <html class="ie ie6" lang="en">
+/[if IE 7 ] <html class="ie ie7" lang="en">
+/[if IE 8 ] <html class="ie ie8" lang="en">
+/ [if (gte IE 9)|!(IE)]><!
+%html{:lang => "en"}
+  / <![endif]
+  %head
+    / Basic Page Needs
+    %meta{:charset => "utf-8"}
+    %title configure — setup your configuration on new machines with ease
+    / Mobile Specific Metas
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1", :name => "viewport"}
+    / CSS
+    %link{:href => "/assets/application.css", :rel => "stylesheet"}
+    %link{:rel => "stylesheet", :href => "/assets/tipsy.css", :type => "text/css" }
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    / Favicons
+    %link{:href => "images/favicon.ico", :rel => "shortcut icon"}
+    %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:400,700", :rel => "stylesheet", :type => "text/css"}
+
+  %body
+    .container
+      = yield
+    %script{:src => "/assets/jq.js"}
+    %script{:type => 'text/javascript', :src => '/javascripts/jquery.tipsy.js'}
+    %script{:src => "/assets/app.js"}
+    :javascript
+      var _gauges = _gauges || [];
+      (function() {
+       var t   = document.createElement('script');
+       t.type  = 'text/javascript';
+       t.async = true;
+       t.id    = 'gauges-tracker';
+       t.setAttribute('data-site-id', '5016dbd9f5a1f526f4000008');
+       t.src = '//secure.gaug.es/track.js';
+       var s = document.getElementsByTagName('script')[0];
+       s.parentNode.insertBefore(t, s);
+       })();

@@ -1,0 +1,16 @@
+%h1
+  Hey! I built this little tool to be able to easily install my dotfiles
+  on different machines and servers.
+%p
+  It's probably useful for you too.
+%form#github_info{:action => "/setup_username", :method => "post", :name => "setup_form"}
+  %input#github_clone_url{:name => "github_clone_url", :placeholder => "git@github.com:you/dotfiles.git", :type => "text", :size => "30"}
+    %button{:type => "submit"}
+      Sounds fun!
+#copyfield
+  %p
+    %strong The command below will do the following:
+  %ol
+    %li Download your dotfiles repository into ~/etc
+    %li Check for conflicting files or symlinks
+    %li Symlink all your dotfiles into your home

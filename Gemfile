@@ -2,8 +2,10 @@ source :rubygems
 
 gem 'heroku'
 gem 'sinatra'
+
+# Templating Engines
 gem 'haml'
-gem 'liquid'
+
 gem 'thin'
 gem 'sprockets'
 gem 'bourbon'

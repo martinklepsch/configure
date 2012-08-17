@@ -38,6 +38,6 @@ class Configure < Sinatra::Base
     user = User.first(:name => params[:id])
     binding.pry
     clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
-    liquid :pinit, :locals => {:repo => clone_url}
+    erb :pinit, :locals => { :repo => clone_url }
   end
 end

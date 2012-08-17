@@ -20,6 +20,10 @@ body {
 
 #copyfield{
   display: none;
+  .error {
+    padding: 5px 10px;
+    background: tint(red, 90%);
+  }
 }
 
 h1 {

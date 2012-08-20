@@ -10,7 +10,7 @@ class Configure < Sinatra::Base
     DataMapper.setup( :default, "sqlite3://#{Dir.pwd}/configure-app.db" )
   end
   configure :production do
-    DataMapper.setup(:default, ENV['DATABASE_URL'])
+    DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_BLUE_URL'])
   end
 
   require_relative 'models/user'

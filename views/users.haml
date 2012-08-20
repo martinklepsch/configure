@@ -4,7 +4,9 @@
   %tr
     %th Username
     %th Clone URL
+    %th Times requested
   = users.each do |user|
     %tr
       %td= user.name
       %td= user.clone_url
+      %td= user.times_requested

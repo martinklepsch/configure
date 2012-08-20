@@ -39,6 +39,7 @@ class Configure < Sinatra::Base
 
   get '/:id' do
     user = User.first(:name => params[:id])
+    user.times_requested += 1
     clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
     erb :pinit, :locals => { :repo => clone_url }
   end

@@ -9,6 +9,10 @@ class Configure < Sinatra::Base
   configure :development do
     DataMapper.setup( :default, "sqlite3://#{Dir.pwd}/configure-app.db" )
   end
+  configure :production do
+    DataMapper.setup(:default, ENV['DATABASE_URL'])
+  end
+
   require_relative 'models/user'
 
   get '/' do

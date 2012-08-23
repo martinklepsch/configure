@@ -41,15 +41,15 @@ class Configure < Sinatra::Base
     user = User.first(:name => params[:id])
     user.times_requested += 1
     user.save
-    clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
+    clone_url = "git://github.com/#{user.name}/#{user.clone_url}"
     erb :pinit, :locals => { :repo => clone_url }
   end
 
-  get '/:id/public' do
+  get '/:id/private' do
     user = User.first(:name => params[:id])
     user.times_requested_public += 1
     user.save
-    clone_url = "git://github.com/#{user.name}/#{user.clone_url}"
+    clone_url = "git@github.com:#{user.name}/#{user.clone_url}"
     erb :pinit, :locals => { :repo => clone_url }
   end
 end

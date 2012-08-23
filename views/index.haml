@@ -1,11 +1,12 @@
 %h1
-  Hey! I built this little tool to be able to easily install my dotfiles
-  on different machines and servers.
+  Hey <a href="http://www.martinklepsch.org" alt="shameless plug :)">I'm Martin</a>. I built this little tool
+  for you to have your dotfiles whereever
+  and whenever you want them.
 %p
-  Enter the private clone url of your dotfiles repository on Github here and you'll get some
-  straight-foward command to install your dotfiles on any system you like!
+  Enter the url of your dotfiles repository on Github here and you'll get some
+  straight-foward command to setup your dotfiles on any system you like!
 %form#github_info{:action => "/setup_username", :method => "post", :name => "setup_form"}
-  %input#github_clone_url{:name => "github_clone_url", :placeholder => "git@github.com:you/dotfiles.git", :type => "text", :size => "30"}
+  %input#github_clone_url{:name => "github_clone_url", :placeholder => "git@github.com:you/dotfiles.git", :type => "text", :size => "33"}
     %button{:type => "submit"}
-      Sounds fun!
+      Show me!
 #copyfield

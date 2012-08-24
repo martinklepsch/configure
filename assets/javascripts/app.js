@@ -16,3 +16,10 @@ $('#github_info').submit(function() { // catch the form's submit event
 $('.me').click(function(){
   mixpanel.track("clicked me");
 });
+$('.gitforked-button').click(function(){
+  mixpanel.track("clicked Fork button");
+});
+$('.me').click(function(){
+  mixpanel.track("clicked Tweet button");
+});
+

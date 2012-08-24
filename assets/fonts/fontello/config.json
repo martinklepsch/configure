@@ -1,0 +1,69 @@
+{
+  "name": "",
+  "glyphs": [
+    {
+      "uid": "8045477f6a7ef0bd7caff130ad25b88d",
+      "orig_css": "facebook-rect",
+      "orig_code": 62209,
+      "css": "facebook-rect",
+      "code": 62209,
+      "src": "brandico"
+    },
+    {
+      "uid": "4c01f5d3ba5fbf029bca8630cce41e6a",
+      "orig_css": "twitter-bird",
+      "orig_code": 62211,
+      "css": "twitter-bird",
+      "code": 62211,
+      "src": "brandico"
+    },
+    {
+      "uid": "4a0bb1ac004980bb3837560d4c9e8cee",
+      "orig_css": "github",
+      "orig_code": 62216,
+      "css": "github",
+      "code": 62216,
+      "src": "brandico"
+    },
+    {
+      "uid": "5a00c877da3f63d37cdc021815e3f5a9",
+      "orig_css": "skype",
+      "orig_code": 62219,
+      "css": "skype",
+      "code": 62219,
+      "src": "brandico"
+    },
+    {
+      "uid": "906348dc798a0d42715cc97c875e3ac6",
+      "orig_css": "twitter",
+      "orig_code": 62212,
+      "css": "twitter",
+      "code": 62212,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "0ece9a12de796b8411f868d582bee678",
+      "orig_css": "github",
+      "orig_code": 62208,
+      "css": "github-1",
+      "code": 62208,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "85528017f1e6053b2253785c31047f44",
+      "orig_css": "comment",
+      "orig_code": 59160,
+      "css": "comment",
+      "code": 59160,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "bf882b30900da12fca090d9796bc3030",
+      "orig_css": "mail",
+      "orig_code": 9993,
+      "css": "mail",
+      "code": 9993,
+      "src": "fontawesome"
+    }
+  ]
+}

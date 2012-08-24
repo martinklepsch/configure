@@ -14,5 +14,5 @@ $('#github_info').submit(function() { // catch the form's submit event
 });
 
 $('.me').click(function(){
-  mixpanel.track("clicked personal website");
+  mixpanel.track("clicked me");
 });

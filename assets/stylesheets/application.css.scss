@@ -1,6 +1,11 @@
 @import 'normalize';
 @import 'bourbon/bourbon';
 
+$links: #0868D3;
+$links-hover: #076FE4;
+$highlight: hsl(212, 94%, 76%);
+$white: hsla(0, 0%, 95%, 1);
+
 html {
   @include background-image(url("/assets/background.jpg"));
   @include background-size(100%);
@@ -12,12 +17,15 @@ body {
   margin: 0;
 }
 
-.container{
+.container {
   padding: 20px;
   background: white;
   width: 400px;
-  margin: 100px auto;
+  margin: 70px auto 0 auto;
   @include box-shadow(0 0 50px 0 hsla(0, 0%, 45%, 0.65));
+}
+.swag {
+  margin-top: 10px;
 }
 
 #copyfield{
@@ -40,7 +48,25 @@ input[type="text"] {
   padding: 6px;
   border: 1px solid #ccc;
   font-family: monospace;
-  @include box-shadow(inset 2px 2px 2px 0 hsla(0, 0%, 85%, 0.65));
+  @include box-shadow(inset 1px 1px 1px 0 hsla(0, 0%, 85%, 0.65));
+}
+
+.command {
+  font-family: monospace;
+  white-space:nowrap;
+  color: $white;
+  font-weight: bold;
+  border: 1px solid $highlight;
+  text-shadow: 1px 1px 1px $highlight;
+  background-color: $links-hover;
+  margin-left: -3em;
+  padding: 12px;
+  display:table;
+  @include box-shadow(4px 4px 1px 0 hsla(0, 0%, 5%, 0.25));
+  // ::selection {
+  //   color: $links;
+  //   background: $highlight
+  // }
 }
 
 table {
@@ -52,8 +78,6 @@ table {
   }
 }
 
-$links: #0868D3;
-$links-hover: #076FE4;
 a {
   color: $links;
   border-bottom: 1px solid $links;

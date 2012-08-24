@@ -1,0 +1,9 @@
+
+.icon-mail:before { content: '\2709'; } /* '✉' */
+.icon-comment:before { content: '\e718'; } /* '' */
+.icon-github-1:before { content: '\f300'; } /* '' */
+.icon-facebook-rect:before { content: '\f301'; } /* '' */
+.icon-twitter-bird:before { content: '\f303'; } /* '' */
+.icon-twitter:before { content: '\f304'; } /* '' */
+.icon-github:before { content: '\f308'; } /* '' */
+.icon-skype:before { content: '\f30b'; } /* '' */

@@ -8,7 +8,11 @@ $('#github_info').submit(function() { // catch the form's submit event
             $('#copyfield').html(response); // update the DIV
         }
     });
-    mixpanel.track("clicked Show me more");
+    mixpanel.track("clicked Show me");
     $('#copyfield').show()
     return false; // cancel original event to prevent form submitting
+});
+
+$('.me').click(function(){
+  mixpanel.track("clicked personal website");
 });
